@@ -75,8 +75,10 @@ try:
         VolumeType='gp2'
     )
     print("Volume created. Waiting for it to become available...")
+    
+    # Correct waiter usage
     ec2_client.get_waiter('volume_available').wait(VolumeIds=[volume.id])
-    print(f"Volume is now available. Volume ID: {volume.id}")
+    
     print("Attaching volume to instance...")
     ec2_client.attach_volume(
         VolumeId=volume.id,
