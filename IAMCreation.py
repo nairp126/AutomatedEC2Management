@@ -5,7 +5,7 @@ import json
 iam_client = boto3.client('iam')
 
 # Define the role name
-role_name = 'EC2_Lambda_S3_Role'
+role_name = 'EC2_Lambda_S3_Role22'
 
 # Trust policy for EC2 and Lambda services
 assume_role_policy_document = json.dumps({

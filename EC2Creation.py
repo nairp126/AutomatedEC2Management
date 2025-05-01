@@ -36,14 +36,9 @@ except iam_client.exceptions.NoSuchEntityException:
     print(f"Instance profile '{instance_profile_name}' created and role '{role_name}' added.")
 
 # -----------------------------
-# 1. Launch an EC2 Instance
+# 1. Launch an EC2 Instance with BlockDeviceMappings
 # -----------------------------
 print("Launching EC2 instance...")
-
-# Replace with a valid AMI ID for your region and your key pair name
-ami_id = 'ami-002f6e91abff6eb96'  # Example AMI ID, change it to a valid one
-instance_type = 't2.micro'
-key_name = 'AutomatedEC2'         # Replace with your actual key pair name
 
 try:
     instances = ec2_resource.create_instances(
@@ -52,7 +47,18 @@ try:
         MaxCount=1,
         InstanceType=instance_type,
         KeyName=key_name,
-        IamInstanceProfile={'Name': instance_profile_name}
+        IamInstanceProfile={'Name': instance_profile_name},
+        BlockDeviceMappings=[
+            {
+                'DeviceName': '/dev/xvda',
+                'Ebs': {
+                    'VolumeSize': 8,
+                    'DeleteOnTermination': True,
+                    'VolumeType': 'gp2',
+                    'Encrypted': True
+                }
+            }
+        ]
     )
     instance = instances[0]
     print("Instance created. Waiting for it to enter the 'running' state...")
